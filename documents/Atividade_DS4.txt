@@ -1,0 +1,21 @@
+CONTEXTUALIZAÇÃO
+A falta de um sistema para facilitar o networking pode dificultar a construção de relações profissionais.
+Muitas pessoas não conseguem se conectar com colegas da área e perder oportunidades de colaboração.
+
+DESAFIO
+Desenvolver um sistema web que permita aos profissionais se 
+autenticar, registrar, visualizar e excluir contatos, além de gerenciar eventos de networking.
+
+1.Diagrama de caso de uso.
+2.Diagrama entidade relacionamento (DER).
+3.Script de criação e população do banco de dados.
+4.Tela de autenticação de usuários (login).
+5.Tela principal do profissional.
+6.Cadastro de contato.
+7.Listar contatos registrados.
+8.Exclusão de contato.
+9.Tela de gerenciamento de eventos de networking.
+10.Listar eventos programados.
+11.Cadastro de feedbacks de eventos.
+12.Sair do sistema (logout).
+13.Lista de requisitos de infraestrutura.

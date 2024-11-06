@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Principal</title>
+    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="/css/contato.css">
+    <link rel="stylesheet" href="/css/evento.css">
+    <link rel="stylesheet" href="/css/menu.css">
+    <link rel="stylesheet" href="/css/convites.css">
+    <link rel="stylesheet" href="/css/global.css">
+</head>
+<body>
+    <div class="appbar">
+        <button onclick="goToTab('menu')">Menu Principal</button>
+        <button onclick="goToTab('add-contato')">Cadastrar Contato</button>
+        <button onclick="goToTab('contatos')">Meus Contatos</button>
+        <button onclick="goToTab('add-evento')">Cadastrar Evento</button>
+        <button onclick="goToTab('eventos')">Meus Eventos</button>
+        <button onclick="goToTab('go-eventos')">Ingressar em Eventos</button>
+        <button onclick="exit()">Sair</button>
+    </div>
+
+    <div id="menu" class="hide">
+        <div id="lista-convites">
+            <label class="title">Inscrições pendentes:</label>
+        </div>
+        <!-- <div id="lista-ingressos">
+            <label class="title">Inscrições realizadas</label>
+        </div> -->
+    </div>
+
+    <div id="add-contato" class="hide">
+        <form action="/add-contato" method="post" onsubmit="cadastrarContato(event)" id="contatoForms">
+            <label class="title">Cadastro de Contato</label>
+            <label class="subtitle">Os campos com "*" são obrigatórios.</label>
+
+            <input type="hidden" name="usuario_id" value="<%=usuario.usuario_id%>">
+    
+            <label for="nome">Nome: *</label>
+            <input name="nome" type="text" placeholder="Nome do contato" required>
+
+            <label for="email">Email:</label>
+            <input id="emailContato" name="email" type="email" placeholder="email_do_contato@gmail.com">
+
+            <label for="telefone">Telefone:</label>
+            <input id="telContato" name="telefone" type="tel" placeholder="00900000000" pattern="^\d{11}$">
+    
+            <input type="submit" value="Cadastrar"> <br>
+        </form>
+    </div>
+
+    <div id="contatos" class="contatos hide">
+        <div id="lista-contatos">
+            <button class="red" id="ordem-lista-contatos" onclick="reLoadContatos()" value="1">Ordem: ABC...</button>
+        </div>
+        <form id="save-editions" action="/salvar-contato" method="post">
+            <input id="save-id" name="contato_id" type="hidden" value="">
+            <input id="save-nome" name="nome" type="hidden" value="">
+            <input id="save-email" name="email" type="hidden" value="">
+            <input id="save-telefone" name="telefone" type="hidden" value="">
+        </form>
+    </div>
+
+    <div id="add-evento" class="hide">
+        <form action="/add-evento" method="post" id="eventoForms">
+            <label class="title">Cadastro de Evento</label>
+            <label class="subtitle">Os campos com "*" são obrigatórios.</label>
+
+            <input type="hidden" name="usuario_id" value="<%=usuario.usuario_id%>">
+    
+            <label for="nome">Nome: *</label>
+            <input name="nome" type="text" placeholder="Nome do evento" required>
+
+            <label for="entrada_id">Entrada: *</label>
+            <select name="entrada_id" id="entrada_id_selector" required>
+                <option id="entrada_id_defaultOption" value="" selected disabled>Escolha uma opção.</option>
+            </select>
+
+            <label for="data_inicio">Data de início: *</label>
+            <input name="data_inicio" type="date" required>
+
+            <label for="data_fim">Data de término: *</label>
+            <input name="data_fim" type="date" required>
+
+            <label for="link">Link:</label>
+            <input name="link" type="text" placeholder="Insira um url para informações ou divulgação.">
+    
+            <input type="submit" value="Cadastrar"> <br>
+        </form>
+    </div>
+
+    <div id="eventos" class="eventos hide">
+        <div id="lista-eventos">
+            <button id="ordem-lista-eventos" onclick="reLoadEventos()" value="1">Ordem: ABC...</button>
+        </div>
+        <div id="editar-eventos" class="hide center edit editable"></div>
+        <div id="convidar-eventos" class="sub-menu hide">
+            <form action="/convidar-evento" method="post" class="box">
+                <label class="subtitle"></label>
+                <label class="named"></label>
+
+                <input type="hidden" name="evento_id" id="input_evento_id">
+
+                <label for="contato_id">Buscar contatos:</label>
+                <select name="contato_id" id="search-box-contatos-eventos" required>
+                    <option class="default" value="" selected disabled>Selecione o contato:</option>
+                </select>
+
+                <input type="submit" value="Convidar">
+            </form>
+        </div>
+        <div id="inscricoes-em-evento" class="sub-menu menuBox hide">
+            <form action="/atualizar-inscricao" method="post" id="form-atualizar-inscricao">
+                <input type="hidden" name="inscricao_id" id="input_inscricao_id">
+                <input type="hidden" name="status_id" id="input_status_id">
+            </form>
+            <label class="title"></label>
+            <label class="named"></label>
+            <div class="list"></div>
+        </div>
+    </div>
+
+    <div id="go-eventos" class="hide">
+        <div id="lista-eventos-publicos">
+            <button id="ordem-lista-eventos-publicos" onclick="reLoadEventosPublicos()" value="1">Ordem: ABC...</button>
+        </div>
+    </div>
+
+    <script src="/js/navigation.js"></script>
+    <script src="/js/loader.js"></script>
+    <script src="/js/validation.js"></script>
+    <script>
+        const contatos = JSON.parse('<%- JSON.stringify(contatos) %>');
+        loadContatos(contatos);
+
+        const entradas = JSON.parse('<%- JSON.stringify(entradas) %>');
+        loadEntradas(entradas);
+
+        const eventos = JSON.parse('<%- JSON.stringify(eventos) %>');
+        const inscricoes = JSON.parse('<%- JSON.stringify(inscricoes) %>');
+        loadEventos(eventos, entradas, contatos, inscricoes);
+
+        const status = JSON.parse('<%- JSON.stringify(status) %>');
+
+        const usuario = JSON.parse('<%- JSON.stringify(usuario) %>');
+        const eventosPublicos = JSON.parse('<%- JSON.stringify(eventosPublicos) %>');
+        loadEventosPublicos(eventosPublicos, usuario);
+
+
+        function reLoadContatos() {
+            const button = document.getElementById('ordem-lista-contatos');
+            let ordemLista = Boolean(Number(button.value));
+            ordemLista = !ordemLista;
+            button.value = Number(ordemLista);
+            loadContatos(contatos, ordemLista);
+
+            button.innerHTML = `Ordem: ${ordemLista? 'ABC...' : 'ZYX...'}`
+        }
+
+        function reLoadEventos() {
+            const button = document.getElementById('ordem-lista-eventos');
+            let ordemLista = Boolean(Number(button.value));
+            ordemLista = !ordemLista;
+            button.value = Number(ordemLista);
+            loadEventos(eventos, entradas, contatos, inscricoes, ordemLista);
+
+            button.innerHTML = `Ordem: ${ordemLista? 'ABC...' : 'ZYX...'}`
+        }
+
+        function reLoadEventosPublicos() {
+            const button = document.getElementById('ordem-lista-eventos-publicos');
+            let ordemLista = Boolean(Number(button.value));
+            ordemLista = !ordemLista;
+            button.value = Number(ordemLista);
+            loadEventosPublicos(eventosPublicos, usuario, ordemLista);
+
+            button.innerHTML = `Ordem: ${ordemLista? 'ABC...' : 'ZYX...'}`
+        }
+    </script>
+</body>
+</html>

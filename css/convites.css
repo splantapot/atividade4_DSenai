@@ -1,0 +1,9 @@
+div#menu {
+    padding: 10px;
+}
+
+div#menu div .title {
+    font-size: 20px;
+    font-weight: 600;
+    color: black;
+}

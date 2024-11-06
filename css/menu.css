@@ -1,0 +1,71 @@
+.menuBox {
+    border: 2px solid black;
+    padding: 10px;
+    width: 400px;
+    max-height: 300px;
+
+    text-align: center;
+}
+
+.menuBox label.title {
+    font-size: 25px;
+    font-weight: 700;
+    margin: 5px;
+    display: block;
+}
+
+.menuBox label.named {
+    font-size: 18px;
+    margin:3px;
+    font-weight: 300;
+    color: gray;
+}
+
+.menuBox .list {
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    margin-top: 15px;
+
+    overflow: auto;
+}
+
+.inscricao-card {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+
+    padding: 2px;
+}
+
+.inscricao-card div{
+    text-align: left;
+    padding: 4px;
+}
+
+.inscricao-card div label {
+    display: block;
+    margin: 2px;
+}
+
+.inscricao-card div label.bold {
+    font-weight: 800;
+}
+
+.inscricao-card button {
+    max-height: 40px;
+    margin-top: 15px;
+}
+
+.edit {
+    width: 1000px;
+    height: 600px;
+    z-index: 2;
+    border-radius: 20px;
+}
+
+.emptyLabel {
+    margin-left: 10px;
+    height: 20px;
+    font-size: 18px;
+}

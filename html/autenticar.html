@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autenticação</title>
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+    <form action="/" method="post" class="center box">
+        <label class="title">Login</label>
+
+        <label for="email">Email:</label>
+        <input name="email" type="email" placeholder="seu_email@gmail.com" required>
+
+        <label for="senha">Senha:</label>
+        <input id="senha" name="senha" type="password" placeholder="Insira sua senha" required>
+
+        <input type="submit" value="Entrar"> <br>
+        <a href="/registrar-usuario">Registre-se por aqui.</a>
+    </form>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const success = Number(urlParams.get('s'));
+        const error = Number(urlParams.get('e'));
+
+        if (success == 1) {
+            alert('Cadastro realizado com sucesso!')
+        }
+        if (error == 1) {
+            alert('Credenciais inválidas')
+        }
+    </script>
+</body>
+</html>

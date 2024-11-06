@@ -1,0 +1,81 @@
+.contatos {
+    display: flex;
+    gap: 5%;
+}
+
+div#lista-contatos {
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 45%;
+
+    margin-top: 5px;
+}
+
+/* Ordem btn */
+div#lista-contatos button {
+    border-radius: 5px;
+    border: 1px solid rgb(180,180,180);
+    padding: 2px;
+    margin-left: 10px;
+}
+
+div#lista-contatos label {
+    margin-left: 10px;
+    height: 20px;
+    font-size: 18px;
+}
+
+/* Setup contatos */
+.contato-card {
+    margin: 5px;
+    margin-left: 10px;
+    padding: 7px;
+
+    border-radius: 10px;
+    box-shadow: -2px 2px 4px rgb(180,180,180);
+
+    display: flex;
+    gap: 20px;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.contato-card div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.contato-card div.buttons {
+    justify-content: space-around;
+    gap:3px;
+}
+
+.contato-card div label {
+    font-size: 14px;
+    color: rgb(100,100,100);
+    font-weight: 400;
+}
+
+.contato-card div .title {
+    font-size: 17px;
+    color: black;
+    font-weight: 600;
+}
+
+.contato-card div button {
+    font-size: 14px;
+    color: black;
+    font-weight: 400;
+    width: 60px;
+    height: auto;
+
+    border: 1px solid gray;
+    border-radius: 4px;
+}
+
+/* Edit contatos */
+
+.editable {
+    background-color: rgb(200,200,255);
+}
