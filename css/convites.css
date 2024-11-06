@@ -2,8 +2,82 @@ div#menu {
     padding: 10px;
 }
 
-div#menu div .title {
+div#menu .title {
     font-size: 20px;
     font-weight: 600;
     color: black;
+    display: block;
+    margin: 10px;
+}
+
+div#menu .title.inner {
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0px;
+    margin-left: 30px;
+}
+
+.invList {
+    border: 1px solid gray;
+    border-radius: 20px;
+    margin: 10px;
+    padding: 10px;
+
+    font-size: 15px;
+    font-weight: 300;
+    color: gray;
+
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.invList .card {
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: -2px 2px 4px rgb(180,180,180);
+
+    display: flex;
+    gap: 20px;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.invList .card div {
+    display: flex;
+    gap: 3px;
+    flex-direction: column;
+}
+
+.invTitle {
+    font-size: 17px;
+    font-weight: 400;
+    color: black;
+}
+
+.invStatus {
+    font-size: 17px;
+    font-weight: 400;
+    color: black;
+}
+
+.invButton {
+    padding: 5px;
+    font-size: 15px;
+}
+
+.invR {
+    color: rgb(255,50,50);
+}
+
+.invG {
+    color: rgb(50,155,50);
+}
+
+.invB {
+    color: rgb(50,50,255);
+}
+
+.invO {
+    color: rgb(255, 150, 50);
 }

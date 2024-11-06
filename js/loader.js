@@ -247,6 +247,7 @@ function loadEventos(eventos = [], entradas = [], contatos = [], inscricoes = {}
         const form = document.getElementById('form-atualizar-inscricao');
         const input_inscricao_id = document.getElementById('input_inscricao_id');
         const input_status_id = document.getElementById('input_status_id');
+
         const aceitarBtn = (inscricao_id) => {
             input_inscricao_id.value = inscricao_id;
             input_status_id.value = 2;
@@ -255,6 +256,11 @@ function loadEventos(eventos = [], entradas = [], contatos = [], inscricoes = {}
         const negarBtn = (inscricao_id) => {
             input_inscricao_id.value = inscricao_id;
             input_status_id.value = 3;
+            form.submit()
+        }
+        const excluirBtn = (inscricao_id) => {
+            input_inscricao_id.value = inscricao_id;
+            input_status_id.value = 'DELETE';
             form.submit()
         }
         
@@ -280,14 +286,19 @@ function loadEventos(eventos = [], entradas = [], contatos = [], inscricoes = {}
                             '<button class="endBtn">Cancelar</button>' :
                             ''
                     }
+                    <button class="delBtn">Excluir</button>
                 `;
                 const accBtn = newCard.querySelector('.accBtn');
                 const endBtn = newCard.querySelector('.endBtn');
+                const delBtn = newCard.querySelector('.delBtn');
                 if (accBtn) {
                     accBtn.addEventListener('click', () => aceitarBtn(inscricao.inscricao_id));
                 }
                 if (endBtn) {
                     newCard.querySelector('.endBtn').addEventListener('click', () => negarBtn(inscricao.inscricao_id));
+                }
+                if (delBtn) {
+                    newCard.querySelector('.delBtn').addEventListener('click', () => excluirBtn(inscricao.inscricao_id));
                 }
 
                 list.appendChild(newCard);
@@ -422,4 +433,103 @@ function loadEventosPublicos(eventos = [], usuario, asc = true){
     } else {
         listaEventos.innerHTML = '<label class="emptyLabel">Não há eventos disponíveis para você no momento.</label>'
     }
+}
+
+function loadMinhasInscricoes(inscricoes, status) {
+    const menu = document.getElementById("menu");
+    const menuTitle = menu.querySelector('.title');
+    menuTitle.remove();
+    const listaConvites = document.getElementById("lista-convites");
+    const listaConvitesTitle = listaConvites.querySelector('.title');
+    const listaIngressos = document.getElementById("lista-ingressos");
+    const listaIngressosTitle = listaIngressos.querySelector('.title');
+    
+    const form = document.getElementById('inscricao_updater');
+    const input_inscricao_id = form.querySelector('[name="inscricao_id"]');
+    const input_status_id = form.querySelector('[name="status_id"]');
+
+    const confirmarInscricao = (inscricao_id) => {
+        input_inscricao_id.value = inscricao_id;
+        input_status_id.value = 2; //Aprovada
+        form.submit();
+    }
+
+    const cancelarInscricao = (inscricao_id) => {
+        input_inscricao_id.value = inscricao_id;
+        input_status_id.value = 3; //Negada
+        form.submit();
+    }
+
+    const excluirInscricao = (inscricao_id, nomeEvento) => {
+        if (confirm(`Deseja realmente excluir sua inscrição em "${nomeEvento}"?`)) {
+            input_inscricao_id.value = inscricao_id;
+            input_status_id.value = 'DELETE'; //Excluir
+            form.submit();
+        }
+    }
+
+    // console.log(status[id-1])
+    const statusColor = ['none', 'O', 'G', 'R', 'B'];
+
+    listaConvites.remove()
+    listaConvitesTitle.remove();
+    listaIngressos.remove()
+    listaIngressosTitle.remove();
+
+    listaConvites.innerHTML = '';
+    listaIngressos.innerHTML = '';
+    for (const inscricao of inscricoes) {
+        const newCard = document.createElement('div');
+        newCard.classList = 'card';
+
+        console.log(inscricao)
+
+        const incStatus = inscricao.i_status;
+        newCard.innerHTML = `
+            <div>
+                <label class="invTitle">Evento: ${inscricao.e_nome}</label>
+                <label>Data de Início: ${inscricao.e_data_inicio}</label>
+                <label>Data de Término: ${inscricao.e_data_fim}</label>
+                ${inscricao.e_link? `<a href="${inscricao.e_link}" target="_blank">Detalhes</a>` : ''}
+                <label class="invStatus inv${statusColor[incStatus]}">Inscrição: ${status[incStatus-1].nome}</label>
+            </div>
+            <div>
+                ${(incStatus == status[3].status_id)? '<button class="invButton accBtn">Aceitar</button>' : ''}
+                <button class="invButton cncBtn">${(incStatus == status[3].status_id)? 'Rejeitar' : 'Cancelar Inscrição'}</button>
+                <button class="invButton delBtn">Excluir</button>
+            <div>
+        `;
+
+        const accBtn = newCard.querySelector('.accBtn')
+        if (accBtn) {
+            accBtn.addEventListener('click', () => confirmarInscricao(inscricao.inscricao_id));
+        }
+        const cncBtn = newCard.querySelector('.cncBtn');
+        if (cncBtn) {
+            cncBtn.addEventListener('click', () => cancelarInscricao(inscricao.inscricao_id));
+        }
+        const delBtn = newCard.querySelector('.delBtn');
+        delBtn.addEventListener('click', () => excluirInscricao(inscricao.inscricao_id, inscricao.e_nome));
+
+        if (incStatus == status[3].status_id) {
+            listaConvites.appendChild(newCard);
+        } else {
+            listaIngressos.appendChild(newCard)
+        }
+    }
+
+    if (listaConvites.innerHTML != '') {
+        menu.appendChild(listaConvitesTitle);
+        menu.appendChild(listaConvites);
+    }
+
+    if (listaIngressos.innerHTML != '') {
+        menu.appendChild(listaIngressosTitle);
+        menu.appendChild(listaIngressos);
+    }
+
+    if (inscricoes.length <= 0) {
+        menu.innerHTML = 'Você não possui convites e inscrições.'
+    }
+    menu.prepend(menuTitle);
 }

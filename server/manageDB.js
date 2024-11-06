@@ -223,6 +223,34 @@ function obterEntradas(db = DB_DEFAULT) {
     });
 }
 
+function obterInscricoesDeUsuario(usuario_id, db = DB_DEFAULT) {
+    return new Promise((resolve, reject) => {
+        const query = `
+            SELECT i.status_id as i_status, 
+                    i.usuario_id as i_usuario,
+                    i.inscricao_id, 
+                    e.usuario_id as admin_id, 
+                    e.nome as e_nome, 
+                    e.data_inicio as e_data_inicio, 
+                    e.data_fim as e_data_fim, 
+                    e.link as e_link, 
+                    u.nome AS admin_nome 
+            FROM inscricoes AS i 
+                JOIN eventos AS e ON i.evento_id = e.evento_id
+                JOIN usuarios AS u ON admin_id = u.usuario_id
+            WHERE i.usuario_id = ?;
+        `;
+        db.all(query, [usuario_id], (error, values) => {
+            if (error) {
+                console.error('GET-INSC-USER => ', error);
+                reject(error);
+            } else {
+                resolve(values);
+            }
+        });
+    });
+}
+
 function obterInscricaoDeUsuarioEmEvento(usuario_id, evento_id, db = DB_DEFAULT) {
     return new Promise((resolve, reject) => {
         const query = "SELECT * FROM inscricoes WHERE usuario_id = ? AND evento_id = ?;";
@@ -293,6 +321,20 @@ function excluirInscricoesDoEvento(evento_id, db = DB_DEFAULT) {
     });
 }
 
+function excluirInscricao(inscricao_id, db = DB_DEFAULT) {
+    return new Promise((resolve, reject) => {
+        const query = "DELETE FROM inscricoes WHERE inscricao_id = ?";
+        db.run(query, [inscricao_id], (error, values) => {
+            if (error) {
+                console.error('DEL-ISNC => ', error);
+                reject(error);
+            } else {
+                resolve(values);
+            }
+        });
+    });
+}
+
 //UPDATE ------------------------------------------------------
 function atualizarContatoPorId(contato_id, nome, email, telefone, db = DB_DEFAULT) {
     return new Promise((resolve, reject) => {
@@ -352,11 +394,13 @@ module.exports = {
     buscarEventosPub,
     obterStatus,
     obterEntradas,
+    obterInscricoesDeUsuario,
     obterInscricaoDeUsuarioEmEvento,
     obterInscricoesEmEvento,
     excluirContatoPorId,
     excluirEventoPorId,
     excluirInscricoesDoEvento,
+    excluirInscricao,
     atualizarContatoPorId,
     atualizarStatusInscricao,
     atualizarEvento

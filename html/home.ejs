@@ -23,12 +23,17 @@
     </div>
 
     <div id="menu" class="hide">
-        <div id="lista-convites">
-            <label class="title">Inscrições pendentes:</label>
+        <label class="title">Bem vindo(a)!</label>
+        <form action="/insc-update" method="post" id="inscricao_updater">
+            <input type="hidden" name="inscricao_id">
+            <input type="hidden" name="status_id">
+        </form>
+        <div id="lista-convites" class="invList">
+            <label class="title inner">- Inscrições pendentes:</label>
         </div>
-        <!-- <div id="lista-ingressos">
-            <label class="title">Inscrições realizadas</label>
-        </div> -->
+        <div id="lista-ingressos" class="invList">
+            <label class="title inner">- Inscrições realizadas</label>
+        </div>
     </div>
 
     <div id="add-contato" class="hide">
@@ -148,6 +153,8 @@
         const eventosPublicos = JSON.parse('<%- JSON.stringify(eventosPublicos) %>');
         loadEventosPublicos(eventosPublicos, usuario);
 
+        const minhasInscricoes = JSON.parse('<%- JSON.stringify(minhasInscricoes) %>');
+        loadMinhasInscricoes(minhasInscricoes, status)
 
         function reLoadContatos() {
             const button = document.getElementById('ordem-lista-contatos');

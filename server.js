@@ -98,6 +98,8 @@ app.get('/home', async (req, res) => {
             telefone: usuario.telefone
         }
 
+        const minhasInscricoes = await manageDB.obterInscricoesDeUsuario(user.usuario_id);
+
         res.render('home', {
             usuario:user, 
             contatos:contatos, 
@@ -105,6 +107,7 @@ app.get('/home', async (req, res) => {
             status:status, 
             entradas:entradas, 
             inscricoes:inscricoes,
+            minhasInscricoes:minhasInscricoes,
             eventosPublicos:eventosPublicos
         });
     }
@@ -214,7 +217,11 @@ app.post('/atualizar-inscricao', async (req, res) => {
         res.redirect('/');
     } else {
         const { inscricao_id, status_id } = req.body;
-        await manageDB.atualizarStatusInscricao(status_id, inscricao_id);
+        if (status_id == 'DELETE') {
+            await manageDB.excluirInscricao(inscricao_id);
+        } else {
+            await manageDB.atualizarStatusInscricao(status_id, inscricao_id);
+        }
         res.redirect('/home?tab=eventos');
     }
 });
@@ -229,6 +236,22 @@ app.post('/ingressar-evento', async (req, res) => {
         res.redirect('/home?tab=go-eventos&s=3');
     }
 });
+
+//atualizar inscrição
+app.post('/insc-update', async (req, res) => {
+    const usuario = req.session.usuario;
+    if (!usuario) {
+        res.redirect('/');
+    } else {
+        const { inscricao_id, status_id } = req.body;
+        if (status_id == 'DELETE') {
+            await manageDB.excluirInscricao(inscricao_id);
+        } else {
+            await manageDB.atualizarStatusInscricao(status_id, inscricao_id);
+        }
+        res.redirect('/home?tab=menu');
+    }
+})
 
 
 // START ------------------------------------------------------
